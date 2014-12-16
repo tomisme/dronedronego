@@ -10,7 +10,7 @@ module.exports = {
   output: {
     path: __dirname,
     filename: 'bundle.js',
-    publicPath: '/client/'
+    publicPath: '/'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin()
@@ -20,7 +20,7 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.jsx$/, loaders: ['react-hot', 'jsx?harmony'] }
+      { test: /\.jsx$/, loaders: ['react-hot', 'es6-loader', 'jsx?harmony'] }
     ]
   }
 };

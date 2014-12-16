@@ -1,22 +1,54 @@
-var React = require('react');
+var React = require("react");
+var Bootstrap = require("react-bootstrap");
+var Router = require("react-router");
+var RouterBootstrap = require("react-router-bootstrap");
 
-var Test = React.createClass({
-  render() {
+var { Nav, Navbar, Grid } = Bootstrap;
+var { RouteHandler, Route, Link } = Router;
+var { NavItemLink, ButtonLink } = RouterBootstrap;
+
+var { Articles, Article } = require("./pages/articles");
+
+var logoStyle = {
+  float: "left",
+  paddingRight: 12,
+  paddingTop: 2
+};
+
+var App = React.createClass({
+  render: function() {
     return (
-      <div className='container'>
-        <div className='row'>
-          <div className='six columns'>
-            <h1>drone drone go</h1>
-          </div>
-          <div className='six columns'>
-            <a className='button' href='#'>Articles</a>
-            <a className='button' href='#'>Units</a>
-            <a className='button' href='#'>Lines</a>
-          </div>
-        </div>
+      <div>
+        <Navbar>
+          <Nav>
+            <Link to="/">
+              <img style={logoStyle} src="images/logo-small.png" />
+              <div className="navbar-brand">
+                drone drone go
+              </div>
+            </Link>
+            <NavItemLink to="articles">
+              Articles
+            </NavItemLink>
+          </Nav>
+        </Navbar>
+
+        <Grid>
+          <RouteHandler />
+        </Grid>
       </div>
     );
   }
 });
 
-React.render(<Test />, document.body);
+var routes = (
+  <Route path="/" handler={App}>
+    <Route name="articles" path="articles" handler={Articles}>
+      <Route name="article" path=":articleId" handler={Article} />
+    </Route>
+  </Route>
+);
+
+Router.run(routes, function (Handler) {
+  React.render(<Handler/>, document.body);
+});
