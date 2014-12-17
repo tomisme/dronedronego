@@ -2,8 +2,8 @@ article
   title
   author
     name
-    img
-  date-posted
+    profileImage
+  datePosted
   content
 
 unit
