@@ -7,8 +7,8 @@ var { Nav, Navbar, Grid } = Bootstrap;
 var { RouteHandler, Route, Link } = Router;
 var { NavItemLink, ButtonLink } = RouterBootstrap;
 
-var { Articles, Article } = require("./pages/articles");
-var { Units } = require("./pages/units");
+var { Articles, Article } = require("./pages/Articles");
+var Units = require("./pages/Units");
 
 var styles = require("./styles/styles.jsx");
 

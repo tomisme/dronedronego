@@ -1,6 +1,6 @@
-{
-  "units": {
-    "aegis": {
+module.exports = {
+  "units": [
+    {
       "name": "Aegis",
       "spell": false,
       "gold": 6,
@@ -21,7 +21,7 @@
       "exhaustAfterClick": 0,
       "lifespan": 0
     },
-    "amporilla": {
+    {
       "name": "Amporilla",
       "spell": false,
       "gold": 12,
@@ -42,7 +42,7 @@
       "exhaustAfterClick": 0,
       "lifespan": 0
     },
-    "animus": {
+    {
       "name": "Animus",
       "spell": false,
       "gold": 6,
@@ -63,7 +63,7 @@
       "exhaustAfterClick": 0,
       "lifespan": 0
     },
-    "antima-comet": {
+    {
       "name": "Antima Comet",
       "spell": false,
       "gold": 2,
@@ -84,7 +84,7 @@
       "exhaustAfterClick": 0,
       "lifespan": 0
     },
-    "apollo": {
+    {
       "name": "Apollo",
       "spell": false,
       "gold": 17,
@@ -105,7 +105,7 @@
       "exhaustAfterClick": 0,
       "lifespan": 0
     },
-    "asteri-cannon": {
+    {
       "name": "Asteri Cannon",
       "spell": false,
       "gold": 16,
@@ -126,7 +126,7 @@
       "exhaustAfterClick": 0,
       "lifespan": 0
     },
-    "auric-impulse": {
+    {
       "name": "Auric Impulse",
       "spell": false,
       "gold": 5,
@@ -147,7 +147,7 @@
       "exhaustAfterClick": 0,
       "lifespan": 0
     },
-    "auride-core": {
+    {
       "name": "Auride Core",
       "spell": false,
       "gold": 1,
@@ -168,5 +168,5 @@
       "exhaustAfterClick": 0,
       "lifespan": 0
     }
-  }
+  ]
 }

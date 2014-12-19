@@ -5,12 +5,21 @@ var Unit = React.createClass({
     name: React.PropTypes.string.isRequired,
     size: React.PropTypes.string
   },
+  getDefaultProps: function() {
+    return {
+      size: "panel"
+    }
+  },
   render: function() {
-    return (
-      <div>
-        <img src="images/units/Amporilla-panel.png" />
-      </div>
-    );
+    let urlName = this.props.name.replace(/\s+/g, ""); // remove spaces
+    let size = this.props.size;
+    let imgSrc; 
+
+    if (size === "panel") {
+      imgSrc = `images/units/${urlName}-panel.png`;
+    }
+
+    return <img src={imgSrc} />;
   }
 });
 
