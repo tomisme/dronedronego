@@ -1,3 +1,5 @@
+"use strict"
+
 var React = require("react");
 var { Link, RouteHandler } = require("react-router");
 var { Panel, Row, Col, Input } = require("react-bootstrap");
