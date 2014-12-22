@@ -6,15 +6,20 @@ var { units } = require("../data");
 
 var UnitResults = React.createClass({
   propTypes: {
-    searchText: React.PropTypes.string,
-    showRed: React.PropTypes.bool,
-    showGreen: React.PropTypes.bool,
-    showBlue: React.PropTypes.bool,
-    showColorless: React.PropTypes.bool
+    searchText: React.PropTypes.string.isRequired,
+    showRed: React.PropTypes.bool.isRequired,
+    showGreen: React.PropTypes.bool.isRequired,
+    showBlue: React.PropTypes.bool.isRequired,
+    showColorless: React.PropTypes.bool.isRequired,
+    showFrontline: React.PropTypes.bool.isRequired,
+    showFragile: React.PropTypes.bool.isRequired,
+    showBlocker: React.PropTypes.bool.isRequired,
+    showPrompt: React.PropTypes.bool.isRequired
   },
   render: function() {
     let unitResults = []
     let { searchText, showRed, showGreen, showBlue, showColorless } = this.props;
+    let { showFrontline, showFragile, showBlocker, showPrompt } = this.props;
 
     units.map(function(unit, i) { 
       let isRed = unit.red > 0;
@@ -29,6 +34,11 @@ var UnitResults = React.createClass({
       if (!showGreen && isGreen) return;
       if (!showBlue && isBlue) return;
       if (!showColorless && isColorless) return;
+
+      if (!showFrontline && unit.frontline) return;
+      if (!showFragile && unit.fragile) return;
+      if (!showBlocker && unit.blocker) return;
+      if (!showPrompt && unit.prompt) return;
 
       unitResults.push(<Unit key={`unitResult${i}`} name={unit.name} />);
     });
