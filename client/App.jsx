@@ -6,12 +6,15 @@ var Router = require("react-router");
 var RouterBootstrap = require("react-router-bootstrap");
 
 var { Nav, Navbar, Grid } = Bootstrap;
-var { RouteHandler, Route, Link } = Router;
+var { RouteHandler, Route, Link, DefaultRoute } = Router;
 var { NavItemLink, ButtonLink } = RouterBootstrap;
-var { Articles, Article } = require("./pages/Articles");
-var Units = require("./pages/Units");
 
-var styles = require("./styles/styles.js");
+var Articles = require("./pages/Articles");
+var Article = require("./pages/Article");
+var Units = require("./pages/Units");
+var Index = require("./pages/Index");
+
+var Logo = require("./components/Logo");
 
 var App = React.createClass({
   render: function() {
@@ -20,14 +23,16 @@ var App = React.createClass({
         <Navbar>
           <Nav>
             <Link to="/">
-              <img style={styles.navLogo} src="images/logo-33x35.png" />
+              <Logo />
               <div className="navbar-brand">
                 drone drone go
               </div>
             </Link>
+
             <NavItemLink to="units">
               Units
             </NavItemLink>
+
             <NavItemLink to="articles">
               Articles
             </NavItemLink>
@@ -44,6 +49,7 @@ var App = React.createClass({
 
 var routes = (
   <Route path="/" handler={App}>
+    <DefaultRoute handler={Index} />
     <Route name="articles" path="articles" handler={Articles}>
       <Route name="article" path=":articleId" handler={Article} />
     </Route>
