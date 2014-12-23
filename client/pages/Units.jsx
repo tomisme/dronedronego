@@ -2,11 +2,10 @@
 
 var React = require("react");
 var { Link, RouteHandler } = require("react-router");
-var { Panel, Row, Col, Input } = require("react-bootstrap");
+var { Panel, Row, Col, Input, Button } = require("react-bootstrap");
 
-var Unit = require("../components/Unit");
-var UnitFilter = require("../components/UnitFilter");
 var UnitResults = require("../components/UnitResults");
+var Icon = require("../components/Icon");
 
 var Units = React.createClass({
 
@@ -24,11 +23,12 @@ var Units = React.createClass({
     };
   },
 
-  handleSearchTextChange: function(searchText) {
+  handleSearchTextChange: function() {
     this.setState({
-      searchText: searchText
+      searchText: this.refs.searchText.getValue()
     });
   },
+
 
   handleToggleClick: function(target) {
     switch(target) {
@@ -114,26 +114,88 @@ var Units = React.createClass({
   },
 
   render: function() {
+    let { showRed, showGreen, showBlue, showColorless } = this.state;
+    let allColorsSelected = (showRed && showGreen && showBlue && showColorless);
+    let allColorsButtonText = allColorsSelected ? "Unselect All" : "Select All";
+
+    let { showFrontline, showFragile, showBlocker, showPrompt } = this.state;
+    let allAttributesSelected = (showFrontline && showFragile && showBlocker && showPrompt);
+    let allAttributesButtonText = allAttributesSelected ? "Unselect All" : "Select All";
+
     return (
       <div>
         <Row>
           <Col md={12}>
             <Panel>
-              <UnitFilter
-                searchText={this.state.searchText}
-                showRed={this.state.showRed}
-                showGreen={this.state.showGreen}
-                showBlue={this.state.showBlue}
-                showColorless={this.state.showColorless}
-                showFrontline={this.state.showFrontline}
-                showFragile={this.state.showFragile}
-                showBlocker={this.state.showBlocker}
-                showPrompt={this.state.showPrompt}
-                onToggleClick={this.handleToggleClick}
-                onAllColorsClick={this.handleAllColorsClick}
-                onAllAttributesClick={this.handleAllAttributesClick}
-                onSearchTextChange={this.handleSearchTextChange}
-              />
+              <Row>
+                <Col md={6}>
+                  <Input
+                    type="text"
+                    label="Filter by name:"
+                    ref="searchText"
+                    value={this.state.searchText}
+                    onChange={this.handleSearchTextChange}
+                  />
+                </Col>
+
+                <Col md={6}>
+                  <Row>
+                    <Col md={12}>
+                      <Button
+                        bsStyle={showRed ? "success" : "danger"}
+                        onClick={this.handleToggleClick.bind(null, "Red")}>
+                        <Icon name={"Red"} />
+                      </Button>
+                      <Button
+                        bsStyle={showGreen ? "success" : "danger"}
+                        onClick={this.handleToggleClick.bind(null, "Green")}>
+                        <Icon name={"Green"} />
+                      </Button>
+                      <Button
+                        bsStyle={showBlue ? "success" : "danger"}
+                        onClick={this.handleToggleClick.bind(null, "Blue")}>
+                        <Icon name={"Blue"} />
+                      </Button>
+                      <Button
+                        bsStyle={showColorless ? "success" : "danger"}
+                        onClick={this.handleToggleClick.bind(null, "Colorless")}>
+                        Colorless
+                      </Button>
+                      <Button onClick={this.handleAllColorsClick}>
+                        {allColorsButtonText}
+                      </Button>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col md={12}>
+                      <Button
+                        bsStyle={showFrontline ? "success" : "danger"}
+                        onClick={this.handleToggleClick.bind(null, "Frontline")}>
+                        <Icon name={"Frontline"} />
+                      </Button>
+                      <Button
+                        bsStyle={showFragile ? "success" : "danger"}
+                        onClick={this.handleToggleClick.bind(null, "Fragile")}>
+                        <Icon name={"Fragile"} />
+                      </Button>
+                      <Button
+                        bsStyle={showBlocker ? "success" : "danger"}
+                        onClick={this.handleToggleClick.bind(null, "Blocker")}>
+                        <Icon name={"Blocker"} />
+                      </Button>
+                      <Button
+                        bsStyle={showPrompt ? "success" : "danger"}
+                        onClick={this.handleToggleClick.bind(null, "Prompt")}>
+                        <Icon name={"Prompt"} />
+                      </Button>
+                      <Button onClick={this.handleAllAttributesClick}>
+                        {allAttributesButtonText}
+                      </Button>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
             </Panel>
           </Col>
         </Row>
