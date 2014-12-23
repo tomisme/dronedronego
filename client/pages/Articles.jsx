@@ -28,14 +28,4 @@ var Articles = React.createClass({
   }
 });
 
-var Article = React.createClass({
-  mixins: [Router.State],
-  render: function() {
-    var { articleId } = this.getParams();
-    return (
-      <div>Hello, {articleId}</div>
-    )
-  }
-});
-
-module.exports = { Articles, Article };
+module.exports = Articles;
