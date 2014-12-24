@@ -9,6 +9,7 @@ var { Panel, Row, Col, Input, Button, ButtonGroup, ButtonToolbar, DropdownButton
 
 var UnitResults = require("../components/UnitResults");
 var Icon = require("../components/Icon");
+var Dropdown = require("../components/Dropdown");
 
 var Units = React.createClass({
   getInitialState() {
@@ -119,47 +120,28 @@ var Units = React.createClass({
 
   handleAllColorsClick() {
     let { showRed, showGreen, showBlue, showGold } = this.state;
-    if (showRed && showGreen && showBlue && showGold) {
-      this.setState({
-        showRed: false,
-        showGreen: false,
-        showBlue: false,
-        showGold: false,
-        showEnergy: false
-      });
-    } else {
-      this.setState({
-        showRed: true,
-        showGreen: true,
-        showBlue: true,
-        showGold: true,
-        showEnergy: true
-      });
-    }
+    let allShown = showRed && showGreen && showBlue && showGold;
+    this.setState({
+      showRed: allShown ? false : true,
+      showGreen: allShown ? false : true,
+      showBlue: allShown ? false : true,
+      showGold: allShown ? false : true,
+      showEnergy: allShown ? false : true
+    });
   },
 
   handleAllAttributesClick() {
     let { showFrontline, showFragile, showBlocker, showPrompt } = this.state;
-    if (showFrontline && showFragile && showBlocker && showPrompt) {
-      this.setState({
-        showFrontline: false,
-        showFragile: false,
-        showBlocker: false,
-        showPrompt: false
-      });
-    } else {
-      this.setState({
-        showFrontline: true,
-        showFragile: true,
-        showBlocker: true,
-        showPrompt: true
-      });
-    }
+    let allShown = showFrontline && showFragile && showBlocker && showPrompt;
+    this.setState({
+      showFrontline: allShown ? false : true,
+      showFragile: allShown ? false : true,
+      showBlocker: allShown ? false : true,
+      showPrompt: allShown ? false : true
+    });
   },
 
   render() {
-    let { displayAs, resultsPerPage, searchTextTarget } = this.state;
-
     let { showRed, showGreen, showBlue, showGold, showEnergy } = this.state;
     let allColorsSelected = (showRed && showGreen && showBlue && showGold && showEnergy);
     let allColorsButtonText = allColorsSelected ? "Hide All" : "Show All";
@@ -178,52 +160,41 @@ var Units = React.createClass({
       );
     };
 
-    let dropdown = (target, handler, options, prefix, postfix) => {
-      return (
-        <DropdownButton title={`${prefix} ${target} ${postfix}`}>
-          {options.map((option) => {
-            return (
-              <MenuItem
-                onSelect={handler.bind(null, option)}
-                key={option}>
-                {option}
-              </MenuItem>
-            );
-          })}
-        </DropdownButton>
-      )
-    };
-
-    let searchTextDropdown = dropdown(
-      searchTextTarget,
-      this.handleSearchTextTargetClick, 
-      ["Name", "Unit Text"], 
-      "Filter by", 
-      ""
+    let searchTextDropdown = (
+      <Dropdown
+        value={this.state.searchTextTarget}
+        onSelect={this.handleSearchTextTargetClick}
+        options={["Name", "Text"]}
+        prefix="Filter by"
+      />
     );
 
-    let sortByDropdown = dropdown(
-      this.state.sortBy,
-      this.handleSortByClick,
-      ["Name", "Gold", "Supply", "Health", "Attack"],
-      "Sort by",
-      ""
+    let sortByDropdown = (
+      <Dropdown
+        value={this.state.sortBy}
+        onSelect={this.handleSortByClick}
+        options={["Name", "Gold", "Supply", "Health", "Attack"]}
+        prefix="Sort by"
+      />
     );
 
-    let resultsPerPageDropdown = dropdown(
-      resultsPerPage,
-      this.handleResultsPerPageClick,
-      [10, 40, 100],
-      "Load",
-      "Results"
+    let resultsPerPageDropdown = (
+      <Dropdown
+        value={this.state.resultsPerPage}
+        onSelect={this.handleResultsPerPageClick}
+        options={[10, 40, 100]}
+        prefix="Load"
+        postfix="Results"
+      />
     );
 
-    let displayAsDropdown = dropdown(
-      displayAs,
-      this.handleDisplayAsClick,
-      ["Panels", "Table"],
-      "Display as",
-      ""
+    let displayAsDropdown = (
+      <Dropdown
+        value={this.state.displayAs}
+        onSelect={this.handleDisplayAsClick}
+        options={["Panels", "Table"]}
+        prefix="Display as"
+      />
     );
 
     let UnitFilter = (
@@ -244,8 +215,8 @@ var Units = React.createClass({
               </Button>
             </ButtonGroup>
 
-            {sortByDropdown}
-            {resultsPerPageDropdown}
+              {sortByDropdown}
+              {resultsPerPageDropdown}
             {displayAsDropdown}
           </ButtonToolbar>
         </Col>
