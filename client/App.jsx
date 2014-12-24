@@ -17,7 +17,7 @@ var Index = require("./pages/Index");
 var Logo = require("./components/Logo");
 
 var App = React.createClass({
-  render: function() {
+  render() {
     return (
       <div>
         <Navbar>

@@ -22,7 +22,7 @@ var UnitResults = React.createClass({
     showPrompt: React.PropTypes.bool.isRequired,
   },
 
-  render: function() {
+  render() {
     let { searchText, searchTextTarget, sortBy, sortOrder } = this.props;
     let { showRed, showGreen, showBlue, showGold, showEnergy } = this.props;
     let { showFrontline, showFragile, showBlocker, showPrompt } = this.props;

@@ -8,7 +8,7 @@ var { Link, RouteHandler } = Router;
 var { Panel, Row, Col } = Bootstrap;
 
 var Articles = React.createClass({
-  render: function() {
+  render() {
     return (
       <Row>
         <Col md={8}>

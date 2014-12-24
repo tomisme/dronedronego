@@ -6,7 +6,7 @@ var Bootstrap = require("react-bootstrap");
 
 var Article = React.createClass({
   mixins: [Router.State],
-  render: function() {
+  render() {
     var { articleId } = this.getParams();
     return (
       <div>Hello, {articleId}</div>

@@ -5,7 +5,7 @@ var React = require("react");
 var Unit = require("../components/Unit");
 
 var Index = React.createClass({
-  render: function() {
+  render() {
     return (
       <div>
         <Unit name="Drone" />

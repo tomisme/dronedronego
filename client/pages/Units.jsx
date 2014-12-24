@@ -11,7 +11,7 @@ var UnitResults = require("../components/UnitResults");
 var Icon = require("../components/Icon");
 
 var Units = React.createClass({
-  getInitialState: function() {
+  getInitialState() {
     return { 
       sortBy: "Name",
       sortOrder: "Ascending",
@@ -31,43 +31,43 @@ var Units = React.createClass({
     };
   },
 
-  handleSearchTextChange: function() {
+  handleSearchTextChange() {
     this.setState({
       searchText: this.refs.searchText.getValue()
     });
   },
 
-  handleSortOrderClick: function() {
+  handleSortOrderClick() {
     this.setState({
       sortOrder: this.state.sortOrder === "Ascending" ? "Descending" : "Ascending"
     });
   },
 
-  handleResultsPerPageClick: function(resultsPerPage) {
+  handleResultsPerPageClick(resultsPerPage) {
     this.setState({
       resultsPerPage: resultsPerPage
     });
   },
 
-  handleDisplayAsClick: function(displayAs) {
+  handleDisplayAsClick(displayAs) {
     this.setState({
       displayAs: displayAs
     });
   },
 
-  handleSearchTextTargetClick: function(searchTextTarget) {
+  handleSearchTextTargetClick(searchTextTarget) {
     this.setState({
       searchTextTarget: searchTextTarget
     });
   },
 
-  handleSortByClick: function(sortMethod) {
+  handleSortByClick(sortMethod) {
     this.setState({
       sortBy: sortMethod
     });
   },
 
-  handleToggleClick: function(target) {
+  handleToggleClick(target) {
     switch(target) {
       case "Gold":
         this.setState({
@@ -117,7 +117,7 @@ var Units = React.createClass({
     }
   },
 
-  handleAllColorsClick: function() {
+  handleAllColorsClick() {
     let { showRed, showGreen, showBlue, showGold } = this.state;
     if (showRed && showGreen && showBlue && showGold) {
       this.setState({
@@ -138,7 +138,7 @@ var Units = React.createClass({
     }
   },
 
-  handleAllAttributesClick: function() {
+  handleAllAttributesClick() {
     let { showFrontline, showFragile, showBlocker, showPrompt } = this.state;
     if (showFrontline && showFragile && showBlocker && showPrompt) {
       this.setState({
@@ -157,7 +157,7 @@ var Units = React.createClass({
     }
   },
 
-  render: function() {
+  render() {
     let { displayAs, resultsPerPage, searchTextTarget } = this.state;
 
     let { showRed, showGreen, showBlue, showGold, showEnergy } = this.state;
