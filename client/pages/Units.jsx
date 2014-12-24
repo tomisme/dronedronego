@@ -1,21 +1,29 @@
 "use strict"
 
 var React = require("react");
-var { Link, RouteHandler } = require("react-router");
-var { Panel, Row, Col, Input, Button } = require("react-bootstrap");
+var Bootstrap = require("react-bootstrap");
+var Router = require("react-router");
+
+var { Link, RouteHandler } = Router;
+var { Panel, Row, Col, Input, Button, ButtonGroup, ButtonToolbar, DropdownButton, MenuItem } = Bootstrap;
 
 var UnitResults = require("../components/UnitResults");
 var Icon = require("../components/Icon");
 
 var Units = React.createClass({
-
   getInitialState: function() {
     return { 
+      sortBy: "Name",
+      sortOrder: "Ascending",
       searchText: "",
+      searchTextTarget: "Name",
+      resultsPerPage: 10,
+      displayAs: "Panels",
+      showGold: true,
+      showEnergy: true,
       showRed: true,
       showGreen: true,
       showBlue: true,
-      showColorless: true,
       showFrontline: true,
       showFragile: true,
       showBlocker: true,
@@ -29,9 +37,48 @@ var Units = React.createClass({
     });
   },
 
+  handleSortOrderClick: function() {
+    this.setState({
+      sortOrder: this.state.sortOrder === "Ascending" ? "Descending" : "Ascending"
+    });
+  },
+
+  handleResultsPerPageClick: function(resultsPerPage) {
+    this.setState({
+      resultsPerPage: resultsPerPage
+    });
+  },
+
+  handleDisplayAsClick: function(displayAs) {
+    this.setState({
+      displayAs: displayAs
+    });
+  },
+
+  handleSearchTextTargetClick: function(searchTextTarget) {
+    this.setState({
+      searchTextTarget: searchTextTarget
+    });
+  },
+
+  handleSortByClick: function(sortMethod) {
+    this.setState({
+      sortBy: sortMethod
+    });
+  },
 
   handleToggleClick: function(target) {
     switch(target) {
+      case "Gold":
+        this.setState({
+          showGold: this.state.showGold ? false : true
+        });
+        break;
+      case "Energy":
+        this.setState({
+          showEnergy: this.state.showEnergy ? false : true
+        });
+        break;
       case "Red":
         this.setState({
           showRed: this.state.showRed ? false : true
@@ -45,11 +92,6 @@ var Units = React.createClass({
       case "Blue":
         this.setState({
           showBlue: this.state.showBlue ? false : true
-        });
-        break;
-      case "Colorless":
-        this.setState({
-          showColorless: this.state.showColorless ? false : true
         });
         break;
       case "Frontline":
@@ -76,20 +118,22 @@ var Units = React.createClass({
   },
 
   handleAllColorsClick: function() {
-    let { showRed, showGreen, showBlue, showColorless } = this.state;
-    if (showRed && showGreen && showBlue && showColorless) {
+    let { showRed, showGreen, showBlue, showGold } = this.state;
+    if (showRed && showGreen && showBlue && showGold) {
       this.setState({
         showRed: false,
         showGreen: false,
         showBlue: false,
-        showColorless: false
+        showGold: false,
+        showEnergy: false
       });
     } else {
       this.setState({
         showRed: true,
         showGreen: true,
         showBlue: true,
-        showColorless: true
+        showGold: true,
+        showEnergy: true
       });
     }
   },
@@ -114,105 +158,145 @@ var Units = React.createClass({
   },
 
   render: function() {
-    let { showRed, showGreen, showBlue, showColorless } = this.state;
-    let allColorsSelected = (showRed && showGreen && showBlue && showColorless);
-    let allColorsButtonText = allColorsSelected ? "Unselect All" : "Select All";
+    let { displayAs, resultsPerPage, searchTextTarget } = this.state;
+
+    let { showRed, showGreen, showBlue, showGold, showEnergy } = this.state;
+    let allColorsSelected = (showRed && showGreen && showBlue && showGold && showEnergy);
+    let allColorsButtonText = allColorsSelected ? "Hide All" : "Show All";
 
     let { showFrontline, showFragile, showBlocker, showPrompt } = this.state;
     let allAttributesSelected = (showFrontline && showFragile && showBlocker && showPrompt);
-    let allAttributesButtonText = allAttributesSelected ? "Unselect All" : "Select All";
+    let allAttributesButtonText = allAttributesSelected ? "Hide All" : "Show All";
+
+    let toggleButton = (target, toggledState) => {
+      return (
+        <Button
+          bsStyle={toggledState ? "success" : "default"}
+          onClick={this.handleToggleClick.bind(null, target)}>
+          <Icon name={target} />
+        </Button>
+      );
+    };
+
+    let dropdown = (target, handler, options, prefix, postfix) => {
+      return (
+        <DropdownButton title={`${prefix} ${target} ${postfix}`}>
+          {options.map((option) => {
+            return (
+              <MenuItem
+                onSelect={handler.bind(null, option)}
+                key={option}>
+                {option}
+              </MenuItem>
+            );
+          })}
+        </DropdownButton>
+      )
+    };
+
+    let searchTextDropdown = dropdown(
+      searchTextTarget,
+      this.handleSearchTextTargetClick, 
+      ["Name", "Unit Text"], 
+      "Filter by", 
+      ""
+    );
+
+    let sortByDropdown = dropdown(
+      this.state.sortBy,
+      this.handleSortByClick,
+      ["Name", "Gold", "Supply", "Health", "Attack"],
+      "Sort by",
+      ""
+    );
+
+    let resultsPerPageDropdown = dropdown(
+      resultsPerPage,
+      this.handleResultsPerPageClick,
+      [10, 40, 100],
+      "Load",
+      "Results"
+    );
+
+    let displayAsDropdown = dropdown(
+      displayAs,
+      this.handleDisplayAsClick,
+      ["Panels", "Table"],
+      "Display as",
+      ""
+    );
+
+    let UnitFilter = (
+      <Row>
+        <Col md={6}>
+          <Input
+            type="text"
+            ref="searchText"
+            value={this.state.searchText}
+            buttonAfter={searchTextDropdown}
+            onChange={this.handleSearchTextChange}
+          />
+
+          <ButtonToolbar>
+            <ButtonGroup>
+              <Button onClick={this.handleSortOrderClick}>
+                {this.state.sortOrder}
+              </Button>
+            </ButtonGroup>
+
+            {sortByDropdown}
+            {resultsPerPageDropdown}
+            {displayAsDropdown}
+          </ButtonToolbar>
+        </Col>
+
+        <Col md={4}>
+          <ButtonToolbar style={{marginBottom: 14}}>
+            {toggleButton("Gold", showGold)}
+            {toggleButton("Energy", showEnergy)}
+            {toggleButton("Red", showRed)}
+            {toggleButton("Green", showGreen)}
+            {toggleButton("Blue", showBlue)}
+            <Button onClick={this.handleAllColorsClick}>
+              {allColorsButtonText}
+            </Button>
+          </ButtonToolbar>
+
+          <ButtonToolbar>
+            {toggleButton("Frontline", showFrontline)}
+            {toggleButton("Fragile", showFragile)}
+            {toggleButton("Blocker", showBlocker)}
+            {toggleButton("Prompt", showPrompt)}
+            <Button onClick={this.handleAllAttributesClick}>
+              {allAttributesButtonText}
+            </Button>
+          </ButtonToolbar>
+
+        </Col>
+        <Col md={1}>
+          <Button bsStyle="danger" style={{marginBottom: 14}}>
+            Include Unselected
+          </Button>
+          <Button bsStyle="danger" >
+            Match with OR
+          </Button>
+        </Col>
+      </Row>
+    );
 
     return (
       <div>
         <Row>
           <Col md={12}>
             <Panel>
-              <Row>
-                <Col md={6}>
-                  <Input
-                    type="text"
-                    label="Filter by name:"
-                    ref="searchText"
-                    value={this.state.searchText}
-                    onChange={this.handleSearchTextChange}
-                  />
-                </Col>
-
-                <Col md={6}>
-                  <Row>
-                    <Col md={12}>
-                      <Button
-                        bsStyle={showRed ? "success" : "danger"}
-                        onClick={this.handleToggleClick.bind(null, "Red")}>
-                        <Icon name={"Red"} />
-                      </Button>
-                      <Button
-                        bsStyle={showGreen ? "success" : "danger"}
-                        onClick={this.handleToggleClick.bind(null, "Green")}>
-                        <Icon name={"Green"} />
-                      </Button>
-                      <Button
-                        bsStyle={showBlue ? "success" : "danger"}
-                        onClick={this.handleToggleClick.bind(null, "Blue")}>
-                        <Icon name={"Blue"} />
-                      </Button>
-                      <Button
-                        bsStyle={showColorless ? "success" : "danger"}
-                        onClick={this.handleToggleClick.bind(null, "Colorless")}>
-                        Colorless
-                      </Button>
-                      <Button onClick={this.handleAllColorsClick}>
-                        {allColorsButtonText}
-                      </Button>
-                    </Col>
-                  </Row>
-
-                  <Row>
-                    <Col md={12}>
-                      <Button
-                        bsStyle={showFrontline ? "success" : "danger"}
-                        onClick={this.handleToggleClick.bind(null, "Frontline")}>
-                        <Icon name={"Frontline"} />
-                      </Button>
-                      <Button
-                        bsStyle={showFragile ? "success" : "danger"}
-                        onClick={this.handleToggleClick.bind(null, "Fragile")}>
-                        <Icon name={"Fragile"} />
-                      </Button>
-                      <Button
-                        bsStyle={showBlocker ? "success" : "danger"}
-                        onClick={this.handleToggleClick.bind(null, "Blocker")}>
-                        <Icon name={"Blocker"} />
-                      </Button>
-                      <Button
-                        bsStyle={showPrompt ? "success" : "danger"}
-                        onClick={this.handleToggleClick.bind(null, "Prompt")}>
-                        <Icon name={"Prompt"} />
-                      </Button>
-                      <Button onClick={this.handleAllAttributesClick}>
-                        {allAttributesButtonText}
-                      </Button>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
+              {UnitFilter}
             </Panel>
           </Col>
         </Row>
         <Row>
           <Col md={12}>
             <Panel>
-              <UnitResults
-                searchText={this.state.searchText}
-                showRed={this.state.showRed}
-                showGreen={this.state.showGreen}
-                showBlue={this.state.showBlue}
-                showColorless={this.state.showColorless}
-                showFrontline={this.state.showFrontline}
-                showFragile={this.state.showFragile}
-                showBlocker={this.state.showBlocker}
-                showPrompt={this.state.showPrompt}
-              />
+              <UnitResults {...this.state} />
             </Panel>
           </Col>
         </Row>
